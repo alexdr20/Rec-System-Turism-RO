@@ -5,12 +5,12 @@ from streamlit_folium import st_folium
 from PIL import Image
 import joblib
 
-# === Setup pagină ===
+# === Config pagină ===
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 st.title("🏝️ Recomandare Turistică Inteligentă")
 st.markdown("Completează preferințele pentru a primi o sugestie de stațiune din România.")
 
-# === Load date + model ===
+# === Încărcare date și model ===
 df = pd.read_csv("statiuni_caracteristici_coord.csv")
 model = joblib.load("mlp_model.pkl")
 
@@ -37,7 +37,7 @@ feature_names = [
     'numberOfNights'
 ]
 
-# === Inițializare sesiune ===
+# === Inițializare stare aplicație ===
 for key in ["recommendation", "no_result", "input_filters"]:
     if key not in st.session_state:
         st.session_state[key] = None
@@ -48,7 +48,7 @@ if st.button("🔄 Resetare filtre"):
         st.session_state[key] = None
     st.rerun()
 
-# === Colectare inputuri dacă nu avem deja un rezultat ===
+# === Colectare inputuri dacă nu există recomandare ===
 if st.session_state.recommendation is None and not st.session_state.no_result:
     sezon = st.radio("🗓️ Sezonul preferat:", sezoane, horizontal=True)
     calator = st.radio("👤 Tipul de călător:", tipuri_calator, horizontal=True)
@@ -75,18 +75,15 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
         df_features = df_model[feature_names].fillna(0)
         df_model['Scor_model'] = model.predict_proba(df_features)[:, 1]
 
-        # === Filtrare activitate + buget ===
         col_activitate = f'activitate_principala_{activitate}'
         col_buget = f'buget_{buget}'
         df_model = df_model[(df_model[col_activitate] == 1) & (df_model[col_buget] == 1)]
 
-        # === Scor de potrivire
         scor = 0
         for col in input_df.columns:
             if col in df_model.columns and user_input[col] is not None:
                 scor += (df_model[col] == user_input[col]).astype(int)
         scor -= abs(df_model['numberOfNights'] - nopti) / 10
-
         df_model['Scor_final'] = scor + df_model['Scor_model']
 
         if not df_model.empty:
@@ -106,15 +103,15 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
         else:
             st.session_state.no_result = True
 
-# === Afișare recomandare finală ===
+# === Afișare rezultate ===
 if st.session_state.no_result:
     st.error("❌ Nicio stațiune nu corespunde criteriilor selectate.")
 elif st.session_state.recommendation is not None:
     recom = st.session_state.recommendation
     filters = st.session_state.input_filters
 
-    st.success(f"🏖️ Recomandare: **{recom['Statiune']}** ({recom['Judet']}) – Activitatea aleasa: _{filters['Activitate'].capitalize()}_")
-    st.markdown("### 🔎 Preferințele tale:")
+    st.success(f"🏖️ Recomandare: **{recom['Statiune']}** ({recom['Judet']}) – Activitate: _{filters['Activitate'].capitalize()}_")
+    st.markdown("### 🔎 Preferințele selectate:")
     st.markdown(f"""
     - **Sezon**: {filters['Sezon'].capitalize()}
     - **Tip călător**: {filters['Tip călător'].capitalize()}
@@ -125,15 +122,17 @@ elif st.session_state.recommendation is not None:
     - **Alimentație**: {filters['Alimentatie'].capitalize()}
     """)
 
-    # === Imagine
+    # === Imagine locală (cu nume exact)
     img_path = f"imagini/{recom['Statiune']}.jpg"
     try:
-        with open(img_path, "rb") as file:
-            st.image(file, caption=recom['Statiune'])
+        image = Image.open(img_path)
+        st.image(image, caption=recom['Statiune'])
     except FileNotFoundError:
         st.warning("⚠️ Nu există imagine locală pentru această stațiune.")
+    except Exception as e:
+        st.warning(f"⚠️ Eroare la încărcarea imaginii: {e}")
 
-    # === Hartă
+    # === Hartă interactivă
     if pd.notna(recom['Latitude']) and pd.notna(recom['Longitude']):
         m = folium.Map(location=[recom['Latitude'], recom['Longitude']], zoom_start=12)
         folium.Marker(

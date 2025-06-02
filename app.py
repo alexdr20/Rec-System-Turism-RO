@@ -16,12 +16,12 @@ model = joblib.load("mlp_model.pkl")
 
 # === Opțiuni și mapări ===
 sezoane = ['rece', 'cald', 'tot']
-tipuri_calator = ['couple', 'family', 'solo', 'group']
+tipuri_calator = ['cuplu', 'familie', 'solo', 'grup']
 map_traveler = {
-    "couple": "Couple",
-    "family": "Family",
+    "cuplu": "Couple",
+    "familie": "Family",
     "solo": "Solo traveler",
-    "group": "Group"
+    "grup": "Group"
 }
 activitati = ['plaja', 'partie', 'trasee', 'tratament']
 valoare_binar = {'nu': 0, 'da': 1, 'nu conteaza': None}

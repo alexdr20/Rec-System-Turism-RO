@@ -1,5 +1,5 @@
 ﻿# Rec-System-Turism-RO
-# 🇷🇴 🧠 Sistem inteligent de Recomandare Turistică (România)
+# 🇷🇴 Sistem inteligent de Recomandare Turistică (România)
 
 Acest proiect este un sistem interactiv de recomandare a stațiunilor turistice din România, dezvoltat în cadrul lucrării de dizertație la programul de master „Statistică și Data Science” – ASE București.
 
@@ -37,7 +37,7 @@ rec-system-turism-ro/
 ├── /imagini # Imagini reprezentative pentru stațiuni (nume identic cu numele stațiunilor)
 └── README.md # Acest fișier
 
-# 🇬🇧 🧠 Smart Tourist Recommender System (Romania)
+# 🇬🇧 Smart Tourist Recommender System (Romania)
 
 This project is an interactive recommendation system for tourist resorts in Romania, developed as part of a master's dissertation in the “Statistics and Data Science” program at ASE Bucharest.
 

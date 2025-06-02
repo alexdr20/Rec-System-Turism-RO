@@ -130,7 +130,7 @@ elif st.session_state.recommendation is not None:
     try:
         with open(img_path, "rb") as file:
             st.image(file, caption=recom['Statiune'])
-    except FileNotFoundError::
+    except FileNotFoundError:
         st.warning("⚠️ Nu există imagine locală pentru această stațiune.")
 
     # === Hartă

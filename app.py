@@ -126,7 +126,7 @@ elif st.session_state.recommendation is not None:
     """)
 
     # === Imagine
-    img_path = f"imagini/{recom['Statiune'].lower().replace(' ', '_')}.jpg"
+    img_path = f"imagini/{recom['Statiune'].replace(' ', '_')}.jpg"
     try:
         with open(img_path, "rb") as file:
             st.image(file, caption=recom['Statiune'])

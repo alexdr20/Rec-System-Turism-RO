@@ -10,10 +10,7 @@ import csv
 # === Config pagină ===
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 st.title("🏝️ Recomandare Turistică Inteligentă")
-user_name = st.text_input("👋 Salut! Cum te numești? Introdu numele tău ca să începem aventura in cautarea destinatiei ideale turistică:")
-if not user_name:
-    st.info("Aștept să îmi spui cum te cheamă 😊")
-    st.stop()
+user_name = st.text_input("👋 Salut! Introdu numele tău ca să începem aventura in cautarea destinatiei ideale:")
 st.markdown("Completează preferințele pentru a primi o sugestie de stațiune din România.")
 
 # === Încărcare date și model ===

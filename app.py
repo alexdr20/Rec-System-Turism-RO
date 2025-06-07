@@ -161,6 +161,5 @@ elif st.session_state.recommendation is not None:
         if not file_exists:
             writer.writeheader()
         writer.writerow(output_data)
-else:
-    st.error("❌ Nu am găsit nicio stațiune care să corespundă tuturor preferințelor. Încearcă să modifici un filtru.")
+
 

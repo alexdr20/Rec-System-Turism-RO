@@ -4,10 +4,16 @@ import folium
 from streamlit_folium import st_folium
 from PIL import Image
 import joblib
+import os
+import csv
 
 # === Config pagină ===
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 st.title("🏝️ Recomandare Turistică Inteligentă")
+user_name = st.text_input("👋 Salut! Cum te numești? Introdu numele tău ca să începem aventura in cautarea destinatiei ideale turistică:")
+if not user_name:
+    st.info("Aștept să îmi spui cum te cheamă 😊")
+    st.stop()
 st.markdown("Completează preferințele pentru a primi o sugestie de stațiune din România.")
 
 # === Încărcare date și model ===
@@ -141,3 +147,23 @@ elif st.session_state.recommendation is not None:
             popup=f"{recom['Statiune']} ({recom['Judet']})"
         ).add_to(m)
         st_folium(m, width=700)
+
+# === Save user recommendation ===
+    output_data = {
+        "Nume Utilizator": user_name,
+        "Statiune Recomandata": recom['Statiune'],
+        "Judet": recom['Judet'],
+        "Activitate": activitate,
+        "Data Recomandare": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    csv_file = "recomandari_utilizatori.csv"
+    file_exists = os.path.isfile(csv_file)
+
+    with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=output_data.keys())
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(output_data)
+else:
+    st.error("❌ Nu am găsit nicio stațiune care să corespundă tuturor preferințelor. Încearcă să modifici un filtru.")
+

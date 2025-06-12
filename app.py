@@ -105,7 +105,8 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
 
 # === Afișare rezultate ===
 
-    st.markdown("### 🔎 Preferințele selectate:")
+if st.session_state.no_result    
+st.markdown("### 🔎 Preferințele selectate:")
     st.markdown(f"""
     - **Sezon**: {filters['Sezon'].capitalize()}
     - **Tip călător**: {filters['Tip călător'].capitalize()}
@@ -116,7 +117,7 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
     - **Alimentație**: {filters['Alimentatie'].capitalize()}
     """)
 
-if st.session_state.no_result:
+:
     st.error("❌ Nicio stațiune nu corespunde criteriilor selectate.")
 elif st.session_state.recommendation is not None:
     recom = st.session_state.recommendation

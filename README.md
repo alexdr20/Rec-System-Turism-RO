@@ -32,9 +32,13 @@ Pe baza acestor inputuri, aplicația:
 
 rec-system-turism-ro/
 ├── app.py # Aplicația principală Streamlit
+
 ├── mlp_model.pkl # Modelul antrenat de tip MLPClassifier
+
 ├── statiuni_caracteristici_coord.csv # Baza de date cu stațiuni și coordonate
+
 ├── /imagini # Imagini reprezentative pentru stațiuni (nume identic cu numele stațiunilor)
+
 └── README.md # Acest fișier
 
 # 🇬🇧 Smart Tourist Recommender System (Romania)
@@ -70,7 +74,11 @@ Based on these inputs, the app:
 
 rec-system-turism-ro/
 ├── app.py # Main Streamlit app
+
 ├── mlp_model.pkl # Trained MLPClassifier model
+
 ├── statiuni_caracteristici_coord.csv # Dataset with resort features and coordinates
+
 ├── /imagini # Folder with resort images (named exactly like the resorts)
+
 └── README.md # This file

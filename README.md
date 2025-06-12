@@ -31,6 +31,7 @@ Pe baza acestor inputuri, aplicația:
 ## 📁 Structură proiect
 
 rec-system-turism-ro/
+
 ├── app.py # Aplicația principală Streamlit
 
 ├── mlp_model.pkl # Modelul antrenat de tip MLPClassifier
@@ -73,6 +74,7 @@ Based on these inputs, the app:
 ## 📁 Project Structure
 
 rec-system-turism-ro/
+
 ├── app.py # Main Streamlit app
 
 ├── mlp_model.pkl # Trained MLPClassifier model

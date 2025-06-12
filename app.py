@@ -104,13 +104,7 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
             st.session_state.no_result = True
 
 # === Afișare rezultate ===
-if st.session_state.no_result:
-    st.error("❌ Nicio stațiune nu corespunde criteriilor selectate.")
-elif st.session_state.recommendation is not None:
-    recom = st.session_state.recommendation
-    filters = st.session_state.input_filters
 
-    st.success(f"🏖️ Recomandare: **{recom['Statiune']}** ({recom['Judet']}) – Activitate: _{filters['Activitate'].capitalize()}_")
     st.markdown("### 🔎 Preferințele selectate:")
     st.markdown(f"""
     - **Sezon**: {filters['Sezon'].capitalize()}
@@ -121,6 +115,14 @@ elif st.session_state.recommendation is not None:
     - **Cultură**: {filters['Cultura'].capitalize()}
     - **Alimentație**: {filters['Alimentatie'].capitalize()}
     """)
+
+if st.session_state.no_result:
+    st.error("❌ Nicio stațiune nu corespunde criteriilor selectate.")
+elif st.session_state.recommendation is not None:
+    recom = st.session_state.recommendation
+    filters = st.session_state.input_filters
+
+    st.success(f"🏖️ Recomandare: **{recom['Statiune']}** ({recom['Judet']}) – Activitate: _{filters['Activitate'].capitalize()}_")
 
     # === Imagine locală (cu nume exact)
     img_path = f"imagini/{recom['Statiune']}.jpg"

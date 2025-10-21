@@ -46,6 +46,70 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown(
+    """
+    <style>
+    /* === Widget containers (radio, selectbox, sliders, etc.) === */
+    div[data-testid="stRadio"], 
+    div[data-testid="stSelectbox"], 
+    div[data-testid="stSlider"], 
+    div[data-testid="stNumberInput"], 
+    div[data-testid="stCheckbox"],
+    div[data-testid="stTextInput"] {
+        background-color: rgba(255, 255, 255, 0.85); /* white box with opacity */
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        margin-bottom: 10px;
+    }
+
+    /* === Labels (questions) === */
+    label[data-testid="stMarkdownContainer"] p {
+        color: #003366;                 /* dark blue for better readability */
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    /* === Radio buttons and options === */
+    div[role="radiogroup"] > label {
+        background-color: rgba(255,255,255,0.9);
+        border-radius: 8px;
+        padding: 4px 8px;
+        margin: 3px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        transition: all 0.2s ease-in-out;
+    }
+
+    div[role="radiogroup"] > label:hover {
+        background-color: rgba(255,255,255,0.95);
+        transform: scale(1.02);
+    }
+
+    /* === Selected radio option === */
+    div[role="radiogroup"] input:checked + div {
+        background-color: rgba(0, 123, 255, 0.9);
+        color: white !important;
+        border-radius: 8px;
+        padding: 4px 8px;
+        transition: all 0.3s ease;
+    }
+
+    /* === Buttons === */
+    button[kind="primary"] {
+        background-color: #007BFF !important;
+        color: white !important;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+    }
+
+    button[kind="primary"]:hover {
+        background-color: #0056b3 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ---------------------------

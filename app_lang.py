@@ -83,12 +83,12 @@ LANG = {
 # =========================
 # Helper: background CSS
 # =========================
-DEFAULT_BG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"   # calm sea
+DEFAULT_BG = "https://img.freepik.com/premium-photo/exploring-world-with-vintage-maps-smartphone_1276740-33677.jpg"   
 BG_BY_ACTIVITY = {
-    "plaja":     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",  # beach
-    "partie":    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",  # ski
-    "trasee":    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",  # trails/mountain
-    "tratament": "https://images.unsplash.com/photo-1505575972945-281afbe2b4c2",  # spa/therapy
+    "plaja":     "https://preview.redd.it/cptzeo4cdie51.jpg?width=640&crop=smart&auto=webp&s=2f4e68544383ea87a937c8e2b2288a731f1dd001",  # beach
+    "partie":    "https://www.pluxee.ro/sites/g/files/jclxxe416/files/styles/coh_x_large/public/2023-09/poiana-brasov-475293493.jpeg.webp?itok=uLDB9uXc",  # ski
+    "trasee":    "https://lp-cms-production.imgix.net/2024-08/LPT1009063.jpg?auto=format,compress&q=72&w=1440&h=810&fit=crop",  # trails/mountain
+    "tratament": "https://static.independent.co.uk/2024/04/04/17/Evening%20at%20The%20Palm%2C%20Therme%2C%20Bucharest%20%28Photo_%20Therme%29.JPG",  # spa/therapy
 }
 
 def set_background(url: str, overlay_rgba="rgba(255,255,255,0.60)"):
@@ -195,18 +195,35 @@ for key in ["recommendation", "no_result", "input_filters"]:
 # Set default background first (form page)
 set_background(DEFAULT_BG, overlay_rgba="rgba(255,255,255,0.55)")
 
-# =========================
-# Language selector (main page, before title)
-# =========================
-# === Language toggle (radio) ===
+# === Language toggle (always visible, restart on change) ===
+
+# Make sure language state exists
+if "lang" not in st.session_state:
+    st.session_state.lang = "RO"
+
 LANG_CHOICES = ["🇷🇴 Română", "🇬🇧 English"]
-lang_choice = st.radio(
+
+def _lang_change_restart():
+    """When language changes, reset everything and rerun app."""
+    choice = st.session_state.lang_toggle_any
+    st.session_state.lang = "RO" if choice.startswith("🇷🇴") else "EN"
+    for k in ["recommendation", "no_result", "input_filters"]:
+        st.session_state[k] = None
+    st.rerun()
+
+# Display the radio buttons horizontally
+idx = 0 if st.session_state.lang == "RO" else 1
+st.radio(
     "🌐 Choose language / Alege limba",
     LANG_CHOICES,
     horizontal=True,
-    key="lang_toggle"
+    index=idx,
+    key="lang_toggle_any",
+    on_change=_lang_change_restart
 )
-lang = "RO" if lang_choice.startswith("🇷🇴") else "EN"
+
+# Set the translation dictionary
+lang = st.session_state.lang
 T = LANG[lang]
 
 

@@ -49,88 +49,135 @@ st.markdown(
 st.markdown(
     """
     <style>
-    /* === Global color reset: prevent Streamlit dark mode auto styling === */
-    html, body, [class*="stAppViewContainer"], [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] {
-        color-scheme: light !important;
-        background-color: transparent !important;
-    }
+    /* Keep the app in light palette everywhere */
+    html, body, [data-testid="stAppViewContainer"] { color-scheme: light !important; }
 
-    /* === Widget containers === */
-    div[data-testid="stRadio"], 
-    div[data-testid="stSelectbox"], 
-    div[data-testid="stSlider"], 
-    div[data-testid="stNumberInput"], 
+    /* === WHITE CARDS FOR ALL QUESTION BLOCKS === */
+    /* Wrap common input types you use (radio, selectbox, slider, number, checkbox, text) */
+    div[data-testid="stRadio"],
+    div[data-testid="stSelectbox"],
+    div[data-testid="stSlider"],
+    div[data-testid="stNumberInput"],
     div[data-testid="stCheckbox"],
     div[data-testid="stTextInput"] {
-        background-color: rgba(255, 255, 255, 0.92);
-        padding: 16px 18px;
+        background: #FFFFFF !important;          /* solid white */
+        border: 1px solid rgba(0,0,0,0.10);
         border-radius: 14px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 16px 18px;
         margin-bottom: 12px;
-        border: 1px solid rgba(0,0,0,0.08);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
-    /* === Labels (section titles) === */
+    /* Make ALL text inside those blocks black (labels + options + helper text) */
+    div[data-testid="stRadio"] *, 
+    div[data-testid="stSelectbox"] *, 
+    div[data-testid="stSlider"] *, 
+    div[data-testid="stNumberInput"] *, 
+    div[data-testid="stCheckbox"] *, 
+    div[data-testid="stTextInput"] * {
+        color: #111111 !important;               /* black text */
+    }
+
+    /* Question label (the title above the options) */
+    label[data-testid="stWidgetLabel"] p,
     label[data-testid="stMarkdownContainer"] p {
         color: #111111 !important;
         font-weight: 600;
-        font-size: 1rem;
+        margin-bottom: 8px;
     }
 
-    /* === Radio buttons === */
+    /* === RADIO OPTIONS: all options on white with black text === */
+    /* The option "pills" */
     div[role="radiogroup"] > label {
-        background-color: white !important;
-        border: 1px solid #cccccc;
-        border-radius: 10px;
+        background: #FFFFFF !important;
         color: #111111 !important;
+        border: 1px solid #CFCFCF !important;
+        border-radius: 10px;
         padding: 6px 12px;
         margin: 4px;
         box-shadow: none;
-        transition: all 0.15s ease-in-out;
+        transition: border 0.15s ease-in-out, background 0.15s ease-in-out;
     }
-
+    /* Hover effect (still white, slightly darker border) */
     div[role="radiogroup"] > label:hover {
-        background-color: #f9f9f9 !important;
-        border-color: #999999;
+        background: #FFFFFF !important;
+        border-color: #999999 !important;
     }
-
-    /* === Selected radio option === */
+    /* Selected option: keep white + black, only stronger border and bold text */
     div[role="radiogroup"] input:checked + div {
-        background-color: white !important;
-        border: 2px solid #111111 !important;
+        background: #FFFFFF !important;
         color: #111111 !important;
-        font-weight: 600;
+        border: 2px solid #111111 !important;
+        font-weight: 700 !important;
     }
 
-    /* === Buttons (Reset / Find resort) === */
+    /* Radio bullet itself (where supported) */
+    input[type="radio"] {
+        accent-color: #111111 !important;        /* black radio dot */
+    }
+
+    /* Buttons (Reset / Find): black on white too */
     button[kind="primary"], button[kind="secondary"] {
-        background-color: white !important;
+        background: #FFFFFF !important;
         color: #111111 !important;
         border: 1px solid #999999 !important;
         border-radius: 10px;
         font-weight: 600;
-        padding: 0.5rem 1rem;
-        transition: background-color 0.2s ease-in-out;
     }
-
     button[kind="primary"]:hover, button[kind="secondary"]:hover {
-        background-color: #f2f2f2 !important;
+        background: #F2F2F2 !important;
         border-color: #555555 !important;
     }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-    /* === Slider text / numbers === */
-    .stSlider label, .stNumberInput label, .stSelectbox label {
+
+st.markdown(
+    """
+    <style>
+    /* === Sidebar: force light theme === */
+    section[data-testid="stSidebar"] {
+        background-color: #f8f9fa !important;       /* light gray background for sidebar */
+        color-scheme: light !important;
+    }
+
+    /* Sidebar text */
+    section[data-testid="stSidebar"] * {
+        color: #111111 !important;                  /* black text everywhere */
+    }
+
+    /* Sidebar selectbox container */
+    section[data-testid="stSidebar"] div[data-baseweb="select"] {
+        background-color: #ffffff !important;       /* white box */
+        border: 1px solid #cccccc !important;
+        border-radius: 10px !important;
         color: #111111 !important;
     }
 
-    .stSlider span, .stNumberInput input, .stSelectbox div {
+    /* Dropdown arrow and text */
+    section[data-testid="stSidebar"] svg {
+        color: #111111 !important;
+        fill: #111111 !important;
+    }
+
+    /* Dropdown options list */
+    section[data-testid="stSidebar"] div[role="listbox"] {
+        background-color: #ffffff !important;
+        border: 1px solid #cccccc !important;
         color: #111111 !important;
     }
 
-    /* === Ensure white cards remain visible in dark mode === */
-    [data-baseweb="radio"], [data-baseweb="select"], [data-baseweb="slider"] {
-        background-color: rgba(255,255,255,0.95) !important;
-        border-radius: 12px;
+    /* Option hover */
+    section[data-testid="stSidebar"] div[role="option"]:hover {
+        background-color: #f2f2f2 !important;
+    }
+
+    /* Sidebar label (Choose language) */
+    section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] p {
+        color: #111111 !important;
+        font-weight: 600;
     }
     </style>
     """,

@@ -198,13 +198,17 @@ set_background(DEFAULT_BG, overlay_rgba="rgba(255,255,255,0.55)")
 # =========================
 # Language selector (main page, before title)
 # =========================
-lang_display = st.selectbox(
+# === Language toggle (radio) ===
+LANG_CHOICES = ["🇷🇴 Română", "🇬🇧 English"]
+lang_choice = st.radio(
     "🌐 Choose language / Alege limba",
-    ["🇷🇴 Română", "🇬🇧 English"],
-    index=0
+    LANG_CHOICES,
+    horizontal=True,
+    key="lang_toggle"
 )
-lang = "RO" if "🇷🇴" in lang_display else "EN"
+lang = "RO" if lang_choice.startswith("🇷🇴") else "EN"
 T = LANG[lang]
+
 
 # =========================
 # Title & subtitle

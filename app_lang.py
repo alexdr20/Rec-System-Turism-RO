@@ -8,6 +8,30 @@ import joblib
 # === Config pagină ===
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 
+# === Background image ===
+background_url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"  # 🌊 example (sea photo)
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background: url("{background_url}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    /* optional: translucent white background for widgets */
+    .stMarkdown, .stRadio, .stSlider, .stButton, .stSelectbox {{
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 10px;
+        padding: 10px;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
 # ---------------------------
 #       i18n / Localizare
 # ---------------------------

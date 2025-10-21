@@ -159,8 +159,8 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
     user_input[f'buget_{buget}'] = 1
     user_input['numberOfNights'] = nopti
     user_input['Info'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[info_key]
-    user_input['Cultura'] = {'nu': 0, 'da': 1, 'nu conteaza': None][cultura_key]
-    user_input['Alimentatie'] = {'nu': 0, 'da': 1, 'nu conteaza': None][alimentatie_key]
+    user_input['Cultura'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[cultura_key]
+    user_input['Alimentatie'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[alimentatie_key]
     input_df = pd.DataFrame([user_input])
 
     if st.button(T["find_btn"], key="find_btn"):

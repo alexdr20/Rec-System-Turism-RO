@@ -197,32 +197,32 @@ set_background(DEFAULT_BG, overlay_rgba="rgba(255,255,255,0.55)")
 
 # === Language toggle (always visible, restart on change) ===
 
-# Make sure language state exists
+# --- Language toggle with restart on change (no on_change callback) ---
 if "lang" not in st.session_state:
-    st.session_state.lang = "RO"
+    st.session_state.lang = "RO"  # default
 
 LANG_CHOICES = ["🇷🇴 Română", "🇬🇧 English"]
+current_lang = st.session_state.lang
+idx = 0 if current_lang == "RO" else 1
 
-def _lang_change_restart():
-    """When language changes, reset everything and rerun app."""
-    choice = st.session_state.lang_toggle_any
-    st.session_state.lang = "RO" if choice.startswith("🇷🇴") else "EN"
-    for k in ["recommendation", "no_result", "input_filters"]:
-        st.session_state[k] = None
-    st.rerun()
-
-# Display the radio buttons horizontally
-idx = 0 if st.session_state.lang == "RO" else 1
-st.radio(
+choice = st.radio(
     "🌐 Alege limba / Choose language",
     LANG_CHOICES,
     horizontal=True,
     index=idx,
-    key="lang_toggle_any",
-    on_change=_lang_change_restart
+    key="lang_toggle_any"
 )
 
-# Set the translation dictionary
+new_lang = "RO" if choice.startswith("🇷🇴") else "EN"
+
+# If the user changed the language (even on the results page), reset and rerun
+if new_lang != current_lang:
+    st.session_state.lang = new_lang
+    for k in ["recommendation", "no_result", "input_filters"]:
+        st.session_state[k] = None
+    st.rerun()  # valid here (outside callback)
+
+# Use T as before
 lang = st.session_state.lang
 T = LANG[lang]
 

@@ -184,6 +184,85 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown(
+    """
+    <style>
+    /* === Force global light mode === */
+    html, body, [data-testid="stAppViewContainer"], section[data-testid="stSidebar"] {
+        color-scheme: light !important;
+        background-color: #FFFFFF !important;
+    }
+
+    /* === Fix main title + subtitles === */
+    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown h1 {
+        color: #111111 !important;   /* black text */
+        text-shadow: none !important;
+    }
+
+    /* === Sidebar general background === */
+    section[data-testid="stSidebar"] {
+        background-color: #f8f9fa !important;  /* light gray */
+        color: #111111 !important;
+    }
+
+    /* === Sidebar label text === */
+    section[data-testid="stSidebar"] * {
+        color: #111111 !important;
+    }
+
+    /* === Sidebar selectbox styling === */
+    section[data-testid="stSidebar"] div[data-baseweb="select"] {
+        background-color: #FFFFFF !important;
+        color: #111111 !important;
+        border: 1px solid #BBBBBB !important;
+        border-radius: 10px !important;
+        padding: 2px 6px !important;
+    }
+
+    /* Dropdown arrow icon */
+    section[data-testid="stSidebar"] svg {
+        color: #111111 !important;
+        fill: #111111 !important;
+    }
+
+    /* Dropdown menu options */
+    section[data-testid="stSidebar"] div[role="listbox"] {
+        background-color: #FFFFFF !important;
+        color: #111111 !important;
+        border: 1px solid #BBBBBB !important;
+        border-radius: 10px !important;
+    }
+
+    /* Hovered or selected options */
+    section[data-testid="stSidebar"] div[role="option"]:hover {
+        background-color: #F2F2F2 !important;
+    }
+
+    /* === Streamlit title alignment fix === */
+    div[data-testid="stMarkdownContainer"] h1 {
+        color: #111111 !important;
+        font-weight: 800 !important;
+    }
+
+    /* === Buttons consistent style === */
+    button[kind="primary"], button[kind="secondary"] {
+        background: #FFFFFF !important;
+        color: #111111 !important;
+        border: 1px solid #999999 !important;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    button[kind="primary"]:hover, button[kind="secondary"]:hover {
+        background-color: #f2f2f2 !important;
+        border-color: #555555 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 
 # ---------------------------

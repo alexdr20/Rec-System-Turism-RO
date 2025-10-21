@@ -214,7 +214,7 @@ def _lang_change_restart():
 # Display the radio buttons horizontally
 idx = 0 if st.session_state.lang == "RO" else 1
 st.radio(
-    "🌐 Choose language / Alege limba",
+    "🌐 Alege limba / Choose language",
     LANG_CHOICES,
     horizontal=True,
     index=idx,

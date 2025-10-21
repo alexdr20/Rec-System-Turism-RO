@@ -12,7 +12,7 @@ st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 #       i18n / Localizare
 # ---------------------------
 LANG = {
-    "RO": {
+    "🇷🇴 RO": {
         "app_title": "🏝️ Recomandare Turistică Inteligentă",
         "app_desc": "Completează preferințele pentru a primi o sugestie de stațiune din România.",
         "sidebar_lang": "Limbă / Language",
@@ -44,7 +44,7 @@ LANG = {
         "img_missing": "⚠️ Nu există imagine locală pentru această stațiune.",
         "img_error": "⚠️ Eroare la încărcarea imaginii: {e}",
     },
-    "EN": {
+    "🇬🇧 EN": {
         "app_title": "🏝️ Smart Tourism Recommendation",
         "app_desc": "Fill in your preferences to get a suggested Romanian resort.",
         "sidebar_lang": "Limbă / Language",

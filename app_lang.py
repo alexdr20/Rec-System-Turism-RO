@@ -12,7 +12,7 @@ st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 #       i18n / Localizare
 # ---------------------------
 LANG = {
-    "🇷🇴 RO": {
+    "RO": {
         "app_title": "🏝️ Recomandare Turistică Inteligentă",
         "app_desc": "Completează preferințele pentru a primi o sugestie de stațiune din România.",
         "sidebar_lang": "Limbă / Language",
@@ -44,7 +44,7 @@ LANG = {
         "img_missing": "⚠️ Nu există imagine locală pentru această stațiune.",
         "img_error": "⚠️ Eroare la încărcarea imaginii: {e}",
     },
-    "🇬🇧 EN": {
+    "EN": {
         "app_title": "🏝️ Smart Tourism Recommendation",
         "app_desc": "Fill in your preferences to get a suggested Romanian resort.",
         "sidebar_lang": "Limbă / Language",
@@ -79,9 +79,14 @@ LANG = {
 }
 
 # Limba selectată în sidebar
-lang = st.sidebar.selectbox(LANG["RO"]["sidebar_lang"], ["RO", "EN"], index=0)
-T = LANG[lang]  # alias scurt
-
+# === Lang selector with flags ===
+lang_display = st.sidebar.selectbox(
+    "🌐 Choose language / Alege limba",
+    ["🇷🇴 Română", "🇬🇧 English"],
+    index=0
+)
+lang = "RO" if "🇷🇴" in lang_display else "EN"
+T = LANG[lang]
 # Helpers: mapăm eticheta afișată -> valoarea canonică (în română)
 def choose_with_labels(label, options_map, key):
     """Arată radio cu etichete traduse, returnează cheia canonică."""

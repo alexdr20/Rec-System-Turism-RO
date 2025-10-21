@@ -49,67 +49,94 @@ st.markdown(
 st.markdown(
     """
     <style>
-    /* === Widget containers (radio, selectbox, sliders, etc.) === */
+    /* === Global color reset: prevent Streamlit dark mode auto styling === */
+    html, body, [class*="stAppViewContainer"], [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] {
+        color-scheme: light !important;
+        background-color: transparent !important;
+    }
+
+    /* === Widget containers === */
     div[data-testid="stRadio"], 
     div[data-testid="stSelectbox"], 
     div[data-testid="stSlider"], 
     div[data-testid="stNumberInput"], 
     div[data-testid="stCheckbox"],
     div[data-testid="stTextInput"] {
-        background-color: rgba(255, 255, 255, 0.85); /* white box with opacity */
-        padding: 12px 16px;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        margin-bottom: 10px;
+        background-color: rgba(255, 255, 255, 0.92);
+        padding: 16px 18px;
+        border-radius: 14px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+        border: 1px solid rgba(0,0,0,0.08);
     }
 
-    /* === Labels (questions) === */
+    /* === Labels (section titles) === */
     label[data-testid="stMarkdownContainer"] p {
-        color: #003366;                 /* dark blue for better readability */
+        color: #111111 !important;
         font-weight: 600;
         font-size: 1rem;
     }
 
-    /* === Radio buttons and options === */
+    /* === Radio buttons === */
     div[role="radiogroup"] > label {
-        background-color: rgba(255,255,255,0.9);
-        border-radius: 8px;
-        padding: 4px 8px;
-        margin: 3px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-        transition: all 0.2s ease-in-out;
+        background-color: white !important;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+        color: #111111 !important;
+        padding: 6px 12px;
+        margin: 4px;
+        box-shadow: none;
+        transition: all 0.15s ease-in-out;
     }
 
     div[role="radiogroup"] > label:hover {
-        background-color: rgba(255,255,255,0.95);
-        transform: scale(1.02);
+        background-color: #f9f9f9 !important;
+        border-color: #999999;
     }
 
     /* === Selected radio option === */
     div[role="radiogroup"] input:checked + div {
-        background-color: rgba(0, 123, 255, 0.9);
-        color: white !important;
-        border-radius: 8px;
-        padding: 4px 8px;
-        transition: all 0.3s ease;
-    }
-
-    /* === Buttons === */
-    button[kind="primary"] {
-        background-color: #007BFF !important;
-        color: white !important;
-        border-radius: 10px;
-        padding: 0.5rem 1rem;
+        background-color: white !important;
+        border: 2px solid #111111 !important;
+        color: #111111 !important;
         font-weight: 600;
     }
 
-    button[kind="primary"]:hover {
-        background-color: #0056b3 !important;
+    /* === Buttons (Reset / Find resort) === */
+    button[kind="primary"], button[kind="secondary"] {
+        background-color: white !important;
+        color: #111111 !important;
+        border: 1px solid #999999 !important;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    button[kind="primary"]:hover, button[kind="secondary"]:hover {
+        background-color: #f2f2f2 !important;
+        border-color: #555555 !important;
+    }
+
+    /* === Slider text / numbers === */
+    .stSlider label, .stNumberInput label, .stSelectbox label {
+        color: #111111 !important;
+    }
+
+    .stSlider span, .stNumberInput input, .stSelectbox div {
+        color: #111111 !important;
+    }
+
+    /* === Ensure white cards remain visible in dark mode === */
+    [data-baseweb="radio"], [data-baseweb="select"], [data-baseweb="slider"] {
+        background-color: rgba(255,255,255,0.95) !important;
+        border-radius: 12px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # ---------------------------

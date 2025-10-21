@@ -80,13 +80,21 @@ LANG = {
 
 # Limba selectată în sidebar
 # === Lang selector with flags ===
+
+# === Lang selector with colored emojis ===
+LANG_FLAGS = {
+    "RO": "🇷🇴 Română",
+    "EN": "🇬🇧 English"
+}
+
 lang_display = st.sidebar.selectbox(
     "🌐 Choose language / Alege limba",
-    ["🇷🇴 Română", "🇬🇧 English"],
+    [LANG_FLAGS["RO"], LANG_FLAGS["EN"]],
     index=0
 )
 lang = "RO" if "🇷🇴" in lang_display else "EN"
 T = LANG[lang]
+
 # Helpers: mapăm eticheta afișată -> valoarea canonică (în română)
 def choose_with_labels(label, options_map, key):
     """Arată radio cu etichete traduse, returnează cheia canonică."""

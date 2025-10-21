@@ -5,274 +5,19 @@ from streamlit_folium import st_folium
 from PIL import Image
 import joblib
 
-# === Config pagină ===
+# =========================
+# Page config
+# =========================
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 
-# === Background image with opacity ===
-background_url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"  # 🌊 Example (sea photo)
-
-st.markdown(
-    f"""
-    <style>
-    /* ===== Background image ===== */
-    .stApp {{
-        background: url("{background_url}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        position: relative;
-    }}
-
-    /* ===== Semi-transparent overlay layer ===== */
-    .stApp::before {{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.65);  /* adjust opacity: 0 = transparent, 1 = opaque */
-        z-index: 0;
-    }}
-
-    /* ===== Ensure Streamlit content stays above overlay ===== */
-    .stApp > div:first-child {{
-        position: relative;
-        z-index: 1;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    """
-    <style>
-    /* Keep the app in light palette everywhere */
-    html, body, [data-testid="stAppViewContainer"] { color-scheme: light !important; }
-
-    /* === WHITE CARDS FOR ALL QUESTION BLOCKS === */
-    /* Wrap common input types you use (radio, selectbox, slider, number, checkbox, text) */
-    div[data-testid="stRadio"],
-    div[data-testid="stSelectbox"],
-    div[data-testid="stSlider"],
-    div[data-testid="stNumberInput"],
-    div[data-testid="stCheckbox"],
-    div[data-testid="stTextInput"] {
-        background: #FFFFFF !important;          /* solid white */
-        border: 1px solid rgba(0,0,0,0.10);
-        border-radius: 14px;
-        padding: 16px 18px;
-        margin-bottom: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    /* Make ALL text inside those blocks black (labels + options + helper text) */
-    div[data-testid="stRadio"] *, 
-    div[data-testid="stSelectbox"] *, 
-    div[data-testid="stSlider"] *, 
-    div[data-testid="stNumberInput"] *, 
-    div[data-testid="stCheckbox"] *, 
-    div[data-testid="stTextInput"] * {
-        color: #111111 !important;               /* black text */
-    }
-
-    /* Question label (the title above the options) */
-    label[data-testid="stWidgetLabel"] p,
-    label[data-testid="stMarkdownContainer"] p {
-        color: #111111 !important;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    /* === RADIO OPTIONS: all options on white with black text === */
-    /* The option "pills" */
-    div[role="radiogroup"] > label {
-        background: #FFFFFF !important;
-        color: #111111 !important;
-        border: 1px solid #CFCFCF !important;
-        border-radius: 10px;
-        padding: 6px 12px;
-        margin: 4px;
-        box-shadow: none;
-        transition: border 0.15s ease-in-out, background 0.15s ease-in-out;
-    }
-    /* Hover effect (still white, slightly darker border) */
-    div[role="radiogroup"] > label:hover {
-        background: #FFFFFF !important;
-        border-color: #999999 !important;
-    }
-    /* Selected option: keep white + black, only stronger border and bold text */
-    div[role="radiogroup"] input:checked + div {
-        background: #FFFFFF !important;
-        color: #111111 !important;
-        border: 2px solid #111111 !important;
-        font-weight: 700 !important;
-    }
-
-    /* Radio bullet itself (where supported) */
-    input[type="radio"] {
-        accent-color: #111111 !important;        /* black radio dot */
-    }
-
-    /* Buttons (Reset / Find): black on white too */
-    button[kind="primary"], button[kind="secondary"] {
-        background: #FFFFFF !important;
-        color: #111111 !important;
-        border: 1px solid #999999 !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    button[kind="primary"]:hover, button[kind="secondary"]:hover {
-        background: #F2F2F2 !important;
-        border-color: #555555 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
-st.markdown(
-    """
-    <style>
-    /* === Sidebar: force light theme === */
-    section[data-testid="stSidebar"] {
-        background-color: #f8f9fa !important;       /* light gray background for sidebar */
-        color-scheme: light !important;
-    }
-
-    /* Sidebar text */
-    section[data-testid="stSidebar"] * {
-        color: #111111 !important;                  /* black text everywhere */
-    }
-
-    /* Sidebar selectbox container */
-    section[data-testid="stSidebar"] div[data-baseweb="select"] {
-        background-color: #ffffff !important;       /* white box */
-        border: 1px solid #cccccc !important;
-        border-radius: 10px !important;
-        color: #111111 !important;
-    }
-
-    /* Dropdown arrow and text */
-    section[data-testid="stSidebar"] svg {
-        color: #111111 !important;
-        fill: #111111 !important;
-    }
-
-    /* Dropdown options list */
-    section[data-testid="stSidebar"] div[role="listbox"] {
-        background-color: #ffffff !important;
-        border: 1px solid #cccccc !important;
-        color: #111111 !important;
-    }
-
-    /* Option hover */
-    section[data-testid="stSidebar"] div[role="option"]:hover {
-        background-color: #f2f2f2 !important;
-    }
-
-    /* Sidebar label (Choose language) */
-    section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] p {
-        color: #111111 !important;
-        font-weight: 600;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    """
-    <style>
-    /* === Force global light mode === */
-    html, body, [data-testid="stAppViewContainer"], section[data-testid="stSidebar"] {
-        color-scheme: light !important;
-        background-color: #FFFFFF !important;
-    }
-
-    /* === Fix main title + subtitles === */
-    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown h1 {
-        color: #111111 !important;   /* black text */
-        text-shadow: none !important;
-    }
-
-    /* === Sidebar general background === */
-    section[data-testid="stSidebar"] {
-        background-color: #f8f9fa !important;  /* light gray */
-        color: #111111 !important;
-    }
-
-    /* === Sidebar label text === */
-    section[data-testid="stSidebar"] * {
-        color: #111111 !important;
-    }
-
-    /* === Sidebar selectbox styling === */
-    section[data-testid="stSidebar"] div[data-baseweb="select"] {
-        background-color: #FFFFFF !important;
-        color: #111111 !important;
-        border: 1px solid #BBBBBB !important;
-        border-radius: 10px !important;
-        padding: 2px 6px !important;
-    }
-
-    /* Dropdown arrow icon */
-    section[data-testid="stSidebar"] svg {
-        color: #111111 !important;
-        fill: #111111 !important;
-    }
-
-    /* Dropdown menu options */
-    section[data-testid="stSidebar"] div[role="listbox"] {
-        background-color: #FFFFFF !important;
-        color: #111111 !important;
-        border: 1px solid #BBBBBB !important;
-        border-radius: 10px !important;
-    }
-
-    /* Hovered or selected options */
-    section[data-testid="stSidebar"] div[role="option"]:hover {
-        background-color: #F2F2F2 !important;
-    }
-
-    /* === Streamlit title alignment fix === */
-    div[data-testid="stMarkdownContainer"] h1 {
-        color: #111111 !important;
-        font-weight: 800 !important;
-    }
-
-    /* === Buttons consistent style === */
-    button[kind="primary"], button[kind="secondary"] {
-        background: #FFFFFF !important;
-        color: #111111 !important;
-        border: 1px solid #999999 !important;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: background-color 0.2s ease-in-out;
-    }
-
-    button[kind="primary"]:hover, button[kind="secondary"]:hover {
-        background-color: #f2f2f2 !important;
-        border-color: #555555 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
-
-# ---------------------------
-#       i18n / Localizare
-# ---------------------------
+# =========================
+# i18n / Localization
+# =========================
 LANG = {
     "RO": {
         "app_title": "🏝️ Recomandare Turistică Inteligentă",
         "app_desc": "Completează preferințele pentru a primi o sugestie de stațiune din România.",
-        "sidebar_lang": "Limbă / Language",
+        "lang_label": "🌐 Alege limba / Choose language",
         "reset": "🔄 Resetare filtre",
         "sezon_label": "🗓️ Sezonul preferat:",
         "sezon_opts": {"rece": "rece", "cald": "cald", "tot": "tot"},
@@ -304,7 +49,7 @@ LANG = {
     "EN": {
         "app_title": "🏝️ Smart Tourism Recommendation",
         "app_desc": "Fill in your preferences to get a suggested Romanian resort.",
-        "sidebar_lang": "Limbă / Language",
+        "lang_label": "🌐 Choose language / Alege limba",
         "reset": "🔄 Reset filters",
         "sezon_label": "🗓️ Preferred season:",
         "sezon_opts": {"rece": "cold", "cald": "warm", "tot": "year-round"},
@@ -335,47 +80,145 @@ LANG = {
     }
 }
 
-# Limba selectată în sidebar
-# === Lang selector with flags ===
-
-# === Lang selector with colored emojis ===
-LANG_FLAGS = {
-    "RO": "🇷🇴 Română",
-    "EN": "🇬🇧 English"
+# =========================
+# Helper: background CSS
+# =========================
+DEFAULT_BG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"   # calm sea
+BG_BY_ACTIVITY = {
+    "plaja":     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",  # beach
+    "partie":    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",  # ski
+    "trasee":    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",  # trails/mountain
+    "tratament": "https://images.unsplash.com/photo-1505575972945-281afbe2b4c2",  # spa/therapy
 }
 
-lang_display = st.sidebar.selectbox(
+def set_background(url: str, overlay_rgba="rgba(255,255,255,0.60)"):
+    st.markdown(
+        f"""
+        <style>
+        /* Force light mode and clear base bg */
+        html, body, [data-testid="stAppViewContainer"] {{
+            color-scheme: light !important;
+            background-color: transparent !important;
+        }}
+        /* Background image */
+        .stApp {{
+            background: url("{url}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }}
+        /* Semi-transparent overlay */
+        .stApp::before {{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: {overlay_rgba};
+            z-index: 0;
+        }}
+        /* Keep app content above overlay */
+        .stApp > div:first-child {{
+            position: relative;
+            z-index: 1;
+        }}
+        /* Titles & text: black */
+        h1, h2, h3, h4, h5, h6, .stMarkdown p, div[data-testid="stMarkdownContainer"] * {{
+            color: #111111 !important;
+            text-shadow: none !important;
+        }}
+
+        /* White cards + black text for ALL inputs */
+        div[data-testid="stRadio"],
+        div[data-testid="stSelectbox"],
+        div[data-testid="stSlider"],
+        div[data-testid="stNumberInput"],
+        div[data-testid="stCheckbox"],
+        div[data-testid="stTextInput"] {{
+            background: #FFFFFF !important;
+            border: 1px solid rgba(0,0,0,0.10);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }}
+        div[data-testid="stRadio"] *,
+        div[data-testid="stSelectbox"] *,
+        div[data-testid="stSlider"] *,
+        div[data-testid="stNumberInput"] *,
+        div[data-testid="stCheckbox"] *,
+        div[data-testid="stTextInput"] * {{
+            color: #111111 !important;
+        }}
+
+        /* Radio options as white pills (selected keeps white/black, thicker border) */
+        div[role="radiogroup"] > label {{
+            background: #FFFFFF !important;
+            color: #111111 !important;
+            border: 1px solid #CFCFCF !important;
+            border-radius: 10px;
+            padding: 6px 12px;
+            margin: 4px;
+        }}
+        div[role="radiogroup"] input:checked + div {{
+            background: #FFFFFF !important;
+            color: #111111 !important;
+            border: 2px solid #111111 !important;
+            font-weight: 700 !important;
+        }}
+        input[type="radio"] {{ accent-color: #111111 !important; }}
+
+        /* Buttons */
+        button[kind="primary"], button[kind="secondary"] {{
+            background: #FFFFFF !important;
+            color: #111111 !important;
+            border: 1px solid #999999 !important;
+            border-radius: 10px;
+            font-weight: 600;
+        }}
+        button[kind="primary"]:hover, button[kind="secondary"]:hover {{
+            background-color: #F2F2F2 !important;
+            border-color: #555555 !important;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# =========================
+# Session state
+# =========================
+for key in ["recommendation", "no_result", "input_filters"]:
+    if key not in st.session_state:
+        st.session_state[key] = None
+
+# Set default background first (form page)
+set_background(DEFAULT_BG, overlay_rgba="rgba(255,255,255,0.55)")
+
+# =========================
+# Language selector (main page, before title)
+# =========================
+lang_display = st.selectbox(
     "🌐 Choose language / Alege limba",
-    [LANG_FLAGS["RO"], LANG_FLAGS["EN"]],
+    ["🇷🇴 Română", "🇬🇧 English"],
     index=0
 )
 lang = "RO" if "🇷🇴" in lang_display else "EN"
 T = LANG[lang]
 
-# Helpers: mapăm eticheta afișată -> valoarea canonică (în română)
-def choose_with_labels(label, options_map, key):
-    """Arată radio cu etichete traduse, returnează cheia canonică."""
-    labels = list(options_map.values())
-    keys = list(options_map.keys())
-    selected_label = st.radio(label, labels, horizontal=True, key=key)
-    # găsește cheia canonică corespunzătoare etichetei selectate
-    inv = {v: k for k, v in options_map.items()}
-    return inv[selected_label]
-
-def choose_with_labels_tristate(label, options_map, key):
-    return choose_with_labels(label, options_map, key)
-
-# ---------------------------
-#    Titlu + descriere
-# ---------------------------
+# =========================
+# Title & subtitle
+# =========================
 st.title(T["app_title"])
 st.markdown(T["app_desc"])
 
-# === Încărcare date și model (logică neschimbată) ===
+# =========================
+# Data & model (unchanged logic)
+# =========================
 df = pd.read_csv("statiuni_caracteristici_coord.csv")
 model = joblib.load("mlp_model.pkl")
 
-# === Opțiuni / mapări interne (logica rămâne) ===
+# Internal canonical values (RO) used by the model
 sezoane = ['rece', 'cald', 'tot']
 tipuri_calator = ['cuplu', 'familie', 'solo', 'grup']
 map_traveler = {
@@ -398,39 +241,42 @@ feature_names = [
     'numberOfNights'
 ]
 
-# === Inițializare stare aplicație ===
-for key in ["recommendation", "no_result", "input_filters"]:
-    if key not in st.session_state:
-        st.session_state[key] = None
+def choose_with_labels(label, options_map, key):
+    labels = list(options_map.values())
+    keys = list(options_map.keys())
+    selected = st.radio(label, labels, horizontal=True, key=key)
+    inv = {v: k for k, v in options_map.items()}
+    return inv[selected]
 
-# === Resetare ===
+# Reset button
 if st.button(T["reset"], key="reset_btn"):
     for key in ["recommendation", "no_result", "input_filters"]:
         st.session_state[key] = None
     st.rerun()
 
-# === Colectare inputuri dacă nu există recomandare ===
+# =========================
+# FORM / INPUTS
+# =========================
 if st.session_state.recommendation is None and not st.session_state.no_result:
-    # Selectoare cu etichete traduse, dar valori canonice înapoi
     sezon = choose_with_labels(T["sezon_label"], T["sezon_opts"], key="sezon")
     calator = choose_with_labels(T["traveler_label"], T["traveler_opts"], key="calator")
     activitate = choose_with_labels(T["activity_label"], T["activity_opts"], key="activitate")
-    info_key = choose_with_labels_tristate(T["info_label"], T["tri_opts"], key="info")
-    cultura_key = choose_with_labels_tristate(T["cult_label"], T["tri_opts"], key="cultura")
-    alimentatie_key = choose_with_labels_tristate(T["alim_label"], T["tri_opts"], key="alim")
+    info_key = choose_with_labels(T["info_label"], T["tri_opts"], key="info")
+    cultura_key = choose_with_labels(T["cult_label"], T["tri_opts"], key="cultura")
+    alimentatie_key = choose_with_labels(T["alim_label"], T["tri_opts"], key="alim")
     buget = choose_with_labels(T["budget_label"], T["budget_opts"], key="buget")
     nopti = st.slider(T["nights_label"], 1, 14, 5, key="nopti")
 
-    # Pregătire input model (logică identică)
+    # Prepare model input (same logic)
     user_input = {col: 0 for col in feature_names}
     user_input[f'sezon_{sezon}'] = 1
     user_input[f'travelerType_{map_traveler[calator]}'] = 1
     user_input[f'activitate_principala_{activitate}'] = 1
     user_input[f'buget_{buget}'] = 1
     user_input['numberOfNights'] = nopti
-    user_input['Info'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[info_key]
-    user_input['Cultura'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[cultura_key]
-    user_input['Alimentatie'] = {'nu': 0, 'da': 1, 'nu conteaza': None}[alimentatie_key]
+    user_input['Info'] = valoare_binar[info_key]
+    user_input['Cultura'] = valoare_binar[cultura_key]
+    user_input['Alimentatie'] = valoare_binar[alimentatie_key]
     input_df = pd.DataFrame([user_input])
 
     if st.button(T["find_btn"], key="find_btn"):
@@ -452,7 +298,6 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
         if not df_model.empty:
             best = df_model.sort_values(by="Scor_final", ascending=False).iloc[0]
             st.session_state.recommendation = best
-            # salvăm filtrele în limbajul UI curent (pentru afișare)
             st.session_state.input_filters = {
                 T["pref_sezon"]: T["sezon_opts"][sezon].capitalize(),
                 T["pref_trav"]: T["traveler_opts"][calator].capitalize(),
@@ -461,36 +306,47 @@ if st.session_state.recommendation is None and not st.session_state.no_result:
                 T["pref_cult"]: T["tri_opts"][cultura_key].capitalize(),
                 T["pref_alim"]: T["tri_opts"][alimentatie_key].capitalize(),
                 T["pref_budget"]: T["budget_opts"][buget].capitalize(),
-                T["pref_nights"]: nopti
+                T["pref_nights"]: nopti,
+                "_activitate_key": activitate,   # keep canonical for bg
             }
             st.session_state.no_result = False
         else:
             st.session_state.no_result = True
 
-# === Afișare rezultate ===
+# =========================
+# RESULTS
+# =========================
 if st.session_state.no_result:
     st.error(T["no_result"])
+
 elif st.session_state.recommendation is not None:
+    # Change background according to activity (after recommendation)
+    act_key = st.session_state.input_filters.get("_activitate_key", "plaja")
+    bg_url = BG_BY_ACTIVITY.get(act_key, DEFAULT_BG)
+    set_background(bg_url, overlay_rgba="rgba(255,255,255,0.60)")
+
     recom = st.session_state.recommendation
     filters = st.session_state.input_filters
 
     st.markdown(T["prefs_title"])
-    # listăm preferințele în ordinea logică
-    prefs_lines = [
-        f"- **{list(filters.keys())[0]}**: {filters[list(filters.keys())[0]]}",
-        f"- **{list(filters.keys())[1]}**: {filters[list(filters.keys())[1]]}",
-        f"- **{T['pref_budget']}**: {filters[T['pref_budget']]}",
-        f"- **{T['pref_nights']}**: {filters[T['pref_nights']]}",
-        f"- **{T['pref_info']}**: {filters[T['pref_info']]}",
-        f"- **{T['pref_cult']}**: {filters[T['pref_cult']]}",
-        f"- **{T['pref_alim']}**: {filters[T['pref_alim']]}"
-    ]
-    st.markdown("\n".join(prefs_lines))
+    st.markdown(
+        "\n".join(
+            [
+                f"- **{T['pref_sezon']}**: {filters[T['pref_sezon']]}",
+                f"- **{T['pref_trav']}**: {filters[T['pref_trav']]}",
+                f"- **{T['pref_budget']}**: {filters[T['pref_budget']]}",
+                f"- **{T['pref_nights']}**: {filters[T['pref_nights']]}",
+                f"- **{T['pref_info']}**: {filters[T['pref_info']]}",
+                f"- **{T['pref_cult']}**: {filters[T['pref_cult']]}",
+                f"- **{T['pref_alim']}**: {filters[T['pref_alim']]}",
+            ]
+        )
+    )
 
     act_disp = filters["Activitate" if lang == "RO" else "Activity"]
     st.success(T["recom"].format(st=recom['Statiune'], jd=recom['Judet'], act=act_disp))
 
-    # === Imagine locală (cu nume exact)
+    # Image
     img_path = f"imagini/{recom['Statiune']}.jpg"
     try:
         image = Image.open(img_path)
@@ -500,7 +356,7 @@ elif st.session_state.recommendation is not None:
     except Exception as e:
         st.warning(T["img_error"].format(e=e))
 
-    # === Hartă interactivă
+    # Map
     if pd.notna(recom['Latitude']) and pd.notna(recom['Longitude']):
         m = folium.Map(location=[recom['Latitude'], recom['Longitude']], zoom_start=12)
         folium.Marker(

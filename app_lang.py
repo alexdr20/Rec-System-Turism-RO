@@ -8,28 +8,44 @@ import joblib
 # === Config pagină ===
 st.set_page_config(page_title="Recomandare Turistică", layout="centered")
 
-# === Background image ===
-background_url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"  # 🌊 example (sea photo)
+# === Background image with opacity ===
+background_url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"  # 🌊 Example (sea photo)
+
 st.markdown(
     f"""
     <style>
+    /* ===== Background image ===== */
     .stApp {{
         background: url("{background_url}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
+        position: relative;
     }}
-    /* optional: translucent white background for widgets */
-    .stMarkdown, .stRadio, .stSlider, .stButton, .stSelectbox {{
-        background-color: rgba(255, 255, 255, 0.85);
-        border-radius: 10px;
-        padding: 10px;
+
+    /* ===== Semi-transparent overlay layer ===== */
+    .stApp::before {{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.65);  /* adjust opacity: 0 = transparent, 1 = opaque */
+        z-index: 0;
+    }}
+
+    /* ===== Ensure Streamlit content stays above overlay ===== */
+    .stApp > div:first-child {{
+        position: relative;
+        z-index: 1;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # ---------------------------
